@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bgColor: #1a1a1a;
+  --textPrimary: #fff;
+  --textSecondary: #666;
+  --bgCursor: white;
+}
+
+* {
+  margin: 0%;
+  padding: 0%;
+  box-sizing: border-box;
+}
