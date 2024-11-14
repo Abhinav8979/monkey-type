@@ -24,7 +24,7 @@ const Footer = () => {
     { name: "Support", icon: faHeadset },
   ];
   return (
-    <div className="flex gap-10 items-center justify-center text-sm text-textPrimary">
+    <div className="flex gap-10 items-center justify-center text-sm text-textPrimary absolute bottom-[4%] left-1/2 -translate-x-1/2">
       {items.map((item, index) => (
         <div key={index} className="flex items-center gap-1 my-2">
           <FontAwesomeIcon icon={item.icon} />

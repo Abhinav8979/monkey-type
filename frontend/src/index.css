@@ -7,6 +7,9 @@
   --textPrimary: #fff;
   --textSecondary: #666;
   --bgCursor: white;
+  --textCorrectColor: white;
+  --textIncorrectColor: #ff0000;
+  --bgButton: white;
 }
 
 * {

@@ -8,6 +8,9 @@ export default {
         textPrimary: "var(--textPrimary)",
         textSecondary: "var(--textSecondary)",
         bgCursorColor: "var(--bgCursor)",
+        textCorrectColor: "var(--textCorrectColor)",
+        textIncorrectColor: "var(--textIncorrectColor)",
+        bgButton: "var(--bgButton)",
       },
       animation: {
         blink: "blink 0.5s infinite",
