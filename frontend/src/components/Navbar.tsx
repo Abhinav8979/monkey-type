@@ -1,46 +1,45 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaw } from "@fortawesome/free-solid-svg-icons";
+import { faPaw, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 import { LinkPropType } from "../types";
 import ThemeSelector from "./ThemeSelector";
 
 const Navbar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const links: LinkPropType[] = [
-    {
-      name: "Speed Test",
-      path: "/",
-    },
-    {
-      name: "Play 1v1",
-      path: "/play-1v1",
-    },
-    {
-      name: "Practice",
-      path: "/practice",
-    },
-    {
-      name: "Sphere",
-      path: "/sphere",
-    },
-    {
-      name: "Rating",
-      path: "/rating",
-    },
+    { name: "Speed Test", path: "/" },
+    { name: "Play 1v1", path: "/play-1v1" },
+    { name: "Practice", path: "/practice" },
+    { name: "Sphere", path: "/sphere" },
+    { name: "Rating", path: "/rating" },
   ];
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
+
   return (
-    <nav className="flex justify-between items-center ">
-      <h1 className="text-2xl">
-        <FontAwesomeIcon icon={faPaw} />
-        <span className="ml-1"> Fast Fingers</span>
+    <nav className="flex justify-between items-center p-4 bg-bgColor fixed top-0 left-0 right-0 z-50">
+      {/* Logo */}
+      <h1 className="flex items-center text-xl md:text-2xl font-bold text-gray-800 dark:text-white">
+        <FontAwesomeIcon icon={faPaw} className="text-textPrimary" />
+        <span className="ml-2">Fast Fingers</span>
       </h1>
-      <div className="font-thin">
-        <ol className="flex justify-around gap-3 items-center">
-          {links.map((link: LinkPropType) => (
-            <li key={link.name} className="mx-6 link">
+
+      {/* Desktop Menu */}
+      <div className="hidden md:flex font-thin">
+        <ol className="flex space-x-16">
+          {links.map((link) => (
+            <li key={link.name} className="link">
               <NavLink
-                className={({ isActive }) => (isActive ? "font-medium" : "")}
                 to={link.path}
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-blue-500 font-medium"
+                    : "text-gray-600 dark:text-gray-300 hover:text-blue-500"
+                }
               >
                 {link.name}
               </NavLink>
@@ -48,15 +47,62 @@ const Navbar = () => {
           ))}
         </ol>
       </div>
-      <div>
+
+      {/* Right Side (Theme Selector & Buttons) */}
+      <div className="hidden md:flex items-center space-x-4">
         <ThemeSelector />
-      </div>
-      <div className="flex gap-5 font-medium">
-        <button className="py-2 px-5 rounded-3xl bg-bgButton text-bgColor">
+        <button className="py-2 px-5 rounded-3xl bg-pink-500 text-white hover:bg-pink-600 transition">
           Sign Up
         </button>
-        <button className="py-2 px-5 rounded-3xl">Login</button>
+        <button className="py-2 px-5 rounded-3xl border border-pink-500 text-pink-500 hover:bg-pink-50 transition">
+          Login
+        </button>
       </div>
+
+      {/* Mobile Menu Button */}
+      <div className="md:hidden flex items-center">
+        <ThemeSelector />
+        <button
+          onClick={toggleMobileMenu}
+          className="ml-2 text-gray-800 dark:text-white focus:outline-none"
+        >
+          <FontAwesomeIcon
+            icon={isMobileMenuOpen ? faTimes : faBars}
+            size="lg"
+          />
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-white dark:bg-gray-800 shadow-md md:hidden">
+          <ol className="flex flex-col items-center space-y-4 py-4">
+            {links.map((link) => (
+              <li key={link.name} className="link">
+                <NavLink
+                  to={link.path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "text-blue-500 font-medium"
+                      : "text-gray-600 dark:text-gray-300 hover:text-blue-500"
+                  }
+                >
+                  {link.name}
+                </NavLink>
+              </li>
+            ))}
+            <div className="flex flex-col items-center space-y-2">
+              <button className="w-32 py-2 rounded-3xl bg-pink-500 text-white hover:bg-pink-600 transition">
+                Sign Up
+              </button>
+              <button className="w-32 py-2 rounded-3xl border border-pink-500 text-pink-500 hover:bg-pink-50 transition">
+                Login
+              </button>
+            </div>
+          </ol>
+        </div>
+      )}
     </nav>
   );
 };

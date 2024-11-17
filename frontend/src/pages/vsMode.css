@@ -1,0 +1,13 @@
+/* Add the spinning animation to the question mark */
+@keyframes spin {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
+
+#player2 {
+  animation: spin 1s linear infinite alternate-reverse;
+}
