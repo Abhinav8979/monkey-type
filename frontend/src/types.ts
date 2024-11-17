@@ -14,3 +14,8 @@ export type Theme = {
   cursorColor: string;
   textColor: string;
 };
+
+export interface ToolTipStyle {
+  backgroundColor: string;
+  color: string;
+}

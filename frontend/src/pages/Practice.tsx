@@ -1,12 +1,15 @@
 import Typing from "../components/Typing";
 import Options from "../components/Options";
+import PracticeProvider from "../redux/practiceProvider";
 
 const Practice = () => {
   return (
-    <section>
-      <Typing />
-      <Options />
-    </section>
+    <PracticeProvider>
+      <section>
+        <Typing />
+        <Options />
+      </section>
+    </PracticeProvider>
   );
 };
 
