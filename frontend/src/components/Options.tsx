@@ -8,15 +8,19 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
+import { useDispatch } from "react-redux";
+import { setSelectedOption } from "../redux/features/practiceSlice"; // Update with the actual path to your slice
 import { ToolTipStyle } from "../types";
 
 const Options = () => {
+  const dispatch = useDispatch();
+
   const [tooltipStyles, setTooltipStyles] = useState<ToolTipStyle>({
     backgroundColor: "",
     color: "",
   });
 
-  const [selectedOptions, setSelectedOptions] = useState({
+  const [localSelectedOptions, setLocalSelectedOptions] = useState({
     group1: null,
     group2: "timer",
     timer: 15,
@@ -31,10 +35,10 @@ const Options = () => {
   }, []);
 
   const handleSelect = (group: "group1" | "group2" | "timer", value: any) => {
-    setSelectedOptions((prev) => ({
-      ...prev,
-      [group]: value,
-    }));
+    const updatedOptions = { ...localSelectedOptions, [group]: value };
+    setLocalSelectedOptions(updatedOptions);
+
+    dispatch(setSelectedOption(updatedOptions));
   };
 
   return (
@@ -51,7 +55,7 @@ const Options = () => {
             data-tooltip-place="bottom"
             onClick={() => handleSelect("group1", value)}
             className={`cursor-pointer px-3 py-2 rounded-full transition-colors duration-300 ${
-              selectedOptions.group1 === value
+              localSelectedOptions.group1 === value
                 ? "bg-textPrimary text-bgColor"
                 : "text-textPrimary hover:text-bgColor hover:bg-textPrimary"
             }`}
@@ -74,7 +78,7 @@ const Options = () => {
             data-tooltip-place="bottom"
             onClick={() => handleSelect("group2", value)}
             className={`cursor-pointer px-3 py-2 rounded-full transition-colors duration-300 ${
-              selectedOptions.group2 === value
+              localSelectedOptions.group2 === value
                 ? "bg-textPrimary text-bgColor"
                 : "text-textPrimary hover:text-bgColor hover:bg-textPrimary"
             }`}
@@ -93,7 +97,7 @@ const Options = () => {
             data-tooltip-place="bottom"
             onClick={() => handleSelect("timer", timer)}
             className={`cursor-pointer px-3 py-2 rounded-full transition-colors duration-300 ${
-              selectedOptions.timer === timer
+              localSelectedOptions.timer === timer
                 ? "bg-textPrimary text-bgColor"
                 : "text-textPrimary hover:text-bgColor hover:bg-textPrimary"
             }`}

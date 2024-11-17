@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useAppSelector } from "../redux/hooks";
+import Timer from "../utils/Timer";
+import { Practice } from "../utils/socketFunctions";
 
 const Typing = () => {
   const [words, setWords] = useState<string[]>([]);
@@ -6,10 +9,17 @@ const Typing = () => {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [typedChars, setTypedChars] = useState<string[][]>([]);
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
+  const [showResult, setShowResult] = useState<boolean>(false);
+
+  const practiceHandler = new Practice(setShowResult);
+
+  const selectedOption = useAppSelector(
+    (state) => state.practice.selectedOptions
+  );
 
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
-  const generateWords = () => {
+  const generateWords = (group1: string, group2: string) => {
     const text =
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam similique iste sit officia magni impedit natus repellat suscipit reprehenderit ex corrupti illum sunt nemo eaque labore cumque est laboriosam architecto, odit mollitia? Libero asperiores assumenda quae magnam maiores voluptates, minima dolore, voluptatem, sit aliquid mollitia voluptate inventore ab. Sint magni enim eius laudantium ut.Magnam laudantium reprehenderit veniam itaque dolorum?";
     const wordArray = text.split(" ");
@@ -45,7 +55,7 @@ const Typing = () => {
   };
 
   const handleKeyupEvent = (event: KeyboardEvent) => {
-    if (!words.length) return;
+    if (!words.length && showResult) return;
     const key = event.key;
 
     // Check if the user typed a space
@@ -158,8 +168,13 @@ const Typing = () => {
   };
 
   useEffect(() => {
-    generateWords();
-  }, []);
+    const group1 = selectedOption.group1;
+    if (group1) {
+      generateWords(group1, selectedOption.group2);
+    } else {
+      generateWords("", selectedOption.group2);
+    }
+  }, [selectedOption.group1, selectedOption.group2]);
 
   useEffect(() => {
     if (words.length > 0) {
@@ -175,11 +190,19 @@ const Typing = () => {
   }, [currentLetterIndex, currentWordIndex]);
 
   return (
-    <div
-      className="relative h-[220px] overflow-hidden text-4xl leading-[55px] text-left focus:outline-0"
-      tabIndex={0}
-    >
-      <div className="text-textSecondary pl-[.5px] flex flex-wrap">
+    <div className="relative h-[220px] overflow-hidden text-4xl leading-[55px] text-left ">
+      <div className="text-textIncorrectColor">
+        <h1>
+          <Timer
+            startTime={selectedOption.time}
+            onTimeUp={practiceHandler.handleTimeUp}
+          />
+        </h1>
+      </div>
+      <div
+        className="text-textSecondary pl-[.5px] flex flex-wrap focus:outline-0"
+        tabIndex={0}
+      >
         {words.map((word, wordIndex) => (
           <div key={wordIndex} className="mr-3" id={`word-${wordIndex}`}>
             {word.split("").map((char, charIndex) => (

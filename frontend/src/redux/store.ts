@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import practiceReducer from "./features/practice";
+import practiceReducer from "./features/practiceSlice";
 
 export const practiceStore = configureStore({
   reducer: {
@@ -9,3 +9,5 @@ export const practiceStore = configureStore({
 
 export type PracticeState = ReturnType<typeof practiceStore.getState>;
 export type PracticeDispatch = typeof practiceStore.dispatch;
+
+export type AppDispatch = PracticeState["practice"];

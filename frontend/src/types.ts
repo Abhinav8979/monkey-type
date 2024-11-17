@@ -19,3 +19,8 @@ export interface ToolTipStyle {
   backgroundColor: string;
   color: string;
 }
+
+export interface TimerType {
+  startTime: number;
+  onTimeUp: () => void;
+}

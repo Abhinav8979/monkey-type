@@ -1,6 +1,6 @@
 import Typing from "../components/Typing";
 import Options from "../components/Options";
-import PracticeProvider from "../redux/practiceProvider";
+import PracticeProvider from "../redux/PracticeProvider";
 
 const Practice = () => {
   return (
