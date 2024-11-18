@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setStartPracticeGame } from "../redux/features/practiceSlice";
+import {
+  setPracticeGameStart,
+  setWordsSummary,
+} from "../redux/features/practiceSlice";
 
 const Typing = () => {
   const [words, setWords] = useState<string[]>([]);
@@ -8,6 +11,7 @@ const Typing = () => {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [typedChars, setTypedChars] = useState<string[][]>([]);
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
+  const [noOfWordsTyped, setNoOfWordsTyped] = useState<number>(0);
 
   const selectedOption = useAppSelector(
     (state) => state.practice.selectedOptions
@@ -23,7 +27,8 @@ const Typing = () => {
 
   const generateWords = (group1: string, group2: string) => {
     const text =
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam similique iste sit officia magni impedit natus repellat suscipit reprehenderit ex corrupti illum sunt nemo eaque labore cumque est laboriosam architecto, odit mollitia? Libero asperiores assumenda quae magnam maiores voluptates, minima dolore, voluptatem, sit aliquid mollitia voluptate inventore ab. Sint magni enim eius laudantium ut.Magnam laudantium reprehenderit veniam itaque dolorum?";
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis optio ipsa sit cum sint!";
+    dispatch(setWordsSummary({ totalWords: text.replace(/\s/g, "").length }));
     const wordArray = text.split(" ");
     setWords(wordArray);
     setTypedChars(wordArray.map(() => []));
@@ -61,7 +66,7 @@ const Typing = () => {
     const key = event.key;
 
     if (!gameStart) {
-      dispatch(setStartPracticeGame(true));
+      dispatch(setPracticeGameStart(true));
     }
 
     // Check if the user typed a space
@@ -81,6 +86,11 @@ const Typing = () => {
           i < words[currentWordIndex].length;
           i++
         ) {
+          setNoOfWordsTyped((prev) => {
+            const updatedValue = prev + 1;
+            dispatch(setWordsSummary({ noOfWordsTyped: updatedValue }));
+            return updatedValue;
+          });
           currentWordChars[i] = "";
         }
 
@@ -109,6 +119,12 @@ const Typing = () => {
         updateCursorPosition(true, true);
         return;
       }
+
+      setNoOfWordsTyped((prev) => {
+        const updatedValue = prev + 1;
+        dispatch(setWordsSummary({ noOfWordsTyped: updatedValue }));
+        return updatedValue;
+      });
 
       const expectedChar = words[currentWordIndex][currentLetterIndex];
       const isCorrect = key === expectedChar;
@@ -141,7 +157,7 @@ const Typing = () => {
 
         if (length > 0 && element?.lastChild) {
           element?.removeChild(element.lastChild);
-          updateCursorPosition(true, true); // Update cursor position after removing a character
+          updateCursorPosition(true, true);
           return;
         }
 
@@ -166,6 +182,12 @@ const Typing = () => {
         });
         setCurrentLetterIndex((prev) => Math.max(prev - 1, 0));
         if (currentLetterIndex) {
+          setNoOfWordsTyped((prev) => {
+            const updatedValue = prev - 1;
+            dispatch(setWordsSummary({ noOfWordsTyped: updatedValue }));
+            return updatedValue;
+          });
+
           updateCursorPosition(true);
         }
         return;

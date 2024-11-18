@@ -2,8 +2,12 @@ import Typing from "../components/Typing";
 import Options from "../components/Options";
 import Timer from "../utils/Timer";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setShowPracticeGame } from "../redux/features/practiceSlice";
-import OneVsOneResult from "../components/OneVsOneResult";
+import {
+  setPracticeGameResult,
+  setPracticeGameStart,
+} from "../redux/features/practiceSlice";
+import PracticeResult from "../components/results/PracticeResult";
+import ProgressBar from "../utils/ProgressBar";
 
 const Practice = () => {
   const selectedOption = useAppSelector(
@@ -17,18 +21,18 @@ const Practice = () => {
   const dispatch = useAppDispatch();
 
   const handleTimeUp = () => {
-    dispatch(setShowPracticeGame(true));
+    dispatch(setPracticeGameResult(true));
+    dispatch(setPracticeGameStart(false));
   };
-  console.log(selectedOption);
 
   return (
     <>
       {gameResult ? (
-        <OneVsOneResult />
+        <PracticeResult />
       ) : (
         <section>
+          {gameStart && <ProgressBar />}
           <Typing />
-
           {gameStart ? (
             <div className="text-textIncorrectColor text-sm opacity-80  md:text-3xl mt-12 text-center">
               <h1>

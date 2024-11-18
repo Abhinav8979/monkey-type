@@ -8,6 +8,8 @@ const initialState = {
   },
   startPracticeGame: false,
   showPracticeGameResult: false,
+  totalWords: 0,
+  noOfWordsTyped: 0,
 };
 
 const practiceSlice = createSlice({
@@ -17,16 +19,28 @@ const practiceSlice = createSlice({
     setSelectedOption: (state, action) => {
       state.selectedOptions = action.payload;
     },
-    setStartPracticeGame: (state, action) => {
+    setPracticeGameStart: (state, action) => {
       state.startPracticeGame = action.payload;
     },
-    setShowPracticeGame: (state, action) => {
+    setPracticeGameResult: (state, action) => {
       state.showPracticeGameResult = action.payload;
+    },
+    setWordsSummary: (state, action) => {
+      if (action.payload.totalWords) {
+        state.totalWords = action.payload.totalWords;
+      }
+      if (action.payload.noOfWordsTyped) {
+        state.noOfWordsTyped = action.payload.noOfWordsTyped;
+      }
     },
   },
 });
 
-export const { setSelectedOption, setStartPracticeGame, setShowPracticeGame } =
-  practiceSlice.actions;
+export const {
+  setSelectedOption,
+  setPracticeGameStart,
+  setPracticeGameResult,
+  setWordsSummary,
+} = practiceSlice.actions;
 
 export default practiceSlice.reducer;
