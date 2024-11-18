@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import VsMode from "./pages/VsMode.tsx";
 import Practice from "./pages/Practice.tsx";
+import PracticeProvider from "./redux/PracticeProvider.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <PracticeProvider>
+      <RouterProvider router={router} />
+    </PracticeProvider>
   </StrictMode>
 );

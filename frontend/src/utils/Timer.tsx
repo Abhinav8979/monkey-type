@@ -22,7 +22,7 @@ const Timer = ({ startTime, onTimeUp }: TimerType) => {
     return `${String(seconds)}`;
   };
 
-  return <>{formatTime(time)}</>;
+  return <> {formatTime(time)}</>;
 };
 
 export default Timer;

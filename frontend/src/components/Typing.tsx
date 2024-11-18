@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../redux/hooks";
-import Timer from "../utils/Timer";
-import { Practice } from "../utils/socketFunctions";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setStartPracticeGame } from "../redux/features/practiceSlice";
 
 const Typing = () => {
   const [words, setWords] = useState<string[]>([]);
@@ -9,13 +8,16 @@ const Typing = () => {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [typedChars, setTypedChars] = useState<string[][]>([]);
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
-  const [showResult, setShowResult] = useState<boolean>(false);
-
-  const practiceHandler = new Practice(setShowResult);
 
   const selectedOption = useAppSelector(
     (state) => state.practice.selectedOptions
   );
+  const showResult = useAppSelector(
+    (state) => state.practice.showPracticeGameResult
+  );
+  const gameStart = useAppSelector((state) => state.practice.startPracticeGame);
+
+  const dispatch = useAppDispatch();
 
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
@@ -57,6 +59,10 @@ const Typing = () => {
   const handleKeyupEvent = (event: KeyboardEvent) => {
     if (!words.length && showResult) return;
     const key = event.key;
+
+    if (!gameStart) {
+      dispatch(setStartPracticeGame(true));
+    }
 
     // Check if the user typed a space
     if (key === " ") {
@@ -191,14 +197,6 @@ const Typing = () => {
 
   return (
     <div className="relative h-[220px] overflow-hidden text-4xl leading-[55px] text-left ">
-      <div className="text-textIncorrectColor">
-        <h1>
-          <Timer
-            startTime={selectedOption.time}
-            onTimeUp={practiceHandler.handleTimeUp}
-          />
-        </h1>
-      </div>
       <div
         className="text-textSecondary pl-[.5px] flex flex-wrap focus:outline-0"
         tabIndex={0}

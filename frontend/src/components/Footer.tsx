@@ -11,6 +11,7 @@ import {
   faDiscord,
   faGithub,
 } from "@fortawesome/free-brands-svg-icons";
+import { useAppSelector } from "../redux/hooks";
 
 const Footer = () => {
   const items = [
@@ -23,12 +24,25 @@ const Footer = () => {
     { name: "Privacy", icon: faLock },
     { name: "Support", icon: faHeadset },
   ];
+
+  const gameStart = useAppSelector((state) => state.practice.startPracticeGame);
+
   return (
-    <div className="flex gap-5 md:gap-10 items-center justify-center text-sm text-textPrimary absolute bottom-[4%] left-1/2 -translate-x-1/2">
+    <div
+      style={{
+        pointerEvents: gameStart ? "none" : "initial",
+        filter: gameStart ? "blur(3px)" : "blur(0px)",
+      }}
+      className="flex gap-5 md:gap-10 items-center justify-center text-sm text-textPrimary absolute bottom-[4%] left-1/2 -translate-x-1/2"
+    >
       {items.map((item, index) => (
         <div
           key={index}
-          className="flex items-center gap-1 my-2 md:text-base text-xs"
+          className={`flex items-center gap-1 my-2 md:text-base text-xs ${
+            gameStart ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+          tabIndex={gameStart ? -1 : 0} // Prevent focus when gameStart is true
+          aria-disabled={gameStart} // Accessibility attribute
         >
           <FontAwesomeIcon icon={item.icon} />
           <span>{item.name}</span>

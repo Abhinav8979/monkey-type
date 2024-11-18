@@ -23,15 +23,3 @@ export class OneVsOne {
     this.setOpponentName(prop.name);
   };
 }
-
-export class Practice {
-  private setShowResult: SetState<boolean>;
-
-  constructor(setShowResult: SetState<boolean>) {
-    this.setShowResult = setShowResult;
-  }
-
-  public handleTimeUp = () => {
-    this.setShowResult(false);
-  };
-}

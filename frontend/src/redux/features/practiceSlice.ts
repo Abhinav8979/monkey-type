@@ -6,6 +6,8 @@ const initialState = {
     group2: "timer",
     time: 15,
   },
+  startPracticeGame: false,
+  showPracticeGameResult: false,
 };
 
 const practiceSlice = createSlice({
@@ -15,9 +17,16 @@ const practiceSlice = createSlice({
     setSelectedOption: (state, action) => {
       state.selectedOptions = action.payload;
     },
+    setStartPracticeGame: (state, action) => {
+      state.startPracticeGame = action.payload;
+    },
+    setShowPracticeGame: (state, action) => {
+      state.showPracticeGameResult = action.payload;
+    },
   },
 });
 
-export const { setSelectedOption } = practiceSlice.actions;
+export const { setSelectedOption, setStartPracticeGame, setShowPracticeGame } =
+  practiceSlice.actions;
 
 export default practiceSlice.reducer;
