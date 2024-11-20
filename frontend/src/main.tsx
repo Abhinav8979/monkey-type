@@ -7,6 +7,8 @@ import VsMode from "./pages/VsMode.tsx";
 import Practice from "./pages/Practice.tsx";
 import PracticeProvider from "./redux/PracticeProvider.tsx";
 import ProtectedRoute from "./utils/ProtectedRoute.tsx";
+import Login from "./pages/Login.tsx";
+import CreateAccount from "./pages/CreateAccount.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
         element: <Practice />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/sign-up",
+    element: <CreateAccount />,
   },
 ]);
 
