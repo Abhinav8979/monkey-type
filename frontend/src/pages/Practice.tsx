@@ -8,6 +8,8 @@ import {
 } from "../redux/features/practiceSlice";
 import PracticeResult from "../components/results/PracticeResult";
 import ProgressBar from "../utils/ProgressBar";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const Practice = () => {
   const selectedOption = useAppSelector(
@@ -18,6 +20,10 @@ const Practice = () => {
     (state) => state.practice.showPracticeGameResult
   );
 
+  const pathname = useLocation().pathname;
+
+  const [isPracticeMode, setIsPracticeMode] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const handleTimeUp = () => {
@@ -25,15 +31,23 @@ const Practice = () => {
     dispatch(setPracticeGameStart(false));
   };
 
+  useEffect(() => {
+    console.log(pathname);
+    if (pathname === "/practice") {
+      console.log("Reched");
+      setIsPracticeMode(true);
+    }
+  }, [pathname]);
+
   return (
     <>
-      {gameResult ? (
+      {gameResult && !isPracticeMode ? (
         <PracticeResult />
       ) : (
         <section>
-          {gameStart && <ProgressBar />}
+          {gameStart && !isPracticeMode && <ProgressBar />}
           <Typing />
-          {gameStart ? (
+          {gameStart && !isPracticeMode ? (
             <div className="text-textIncorrectColor text-sm opacity-80  md:text-3xl mt-12 text-center">
               <h1>
                 <span className="text-textPrimary">Ends in: </span>

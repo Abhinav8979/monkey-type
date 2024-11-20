@@ -10,6 +10,9 @@ const initialState = {
   showPracticeGameResult: false,
   totalWords: 0,
   noOfWordsTyped: 0,
+  correctWordsTyped: 0,
+  incorrectWordsTyped: 0,
+  extraWordsTyped: 0,
 };
 
 const practiceSlice = createSlice({
@@ -31,6 +34,15 @@ const practiceSlice = createSlice({
       }
       if (action.payload.noOfWordsTyped) {
         state.noOfWordsTyped = action.payload.noOfWordsTyped;
+      }
+      if (action.payload.correct) {
+        state.correctWordsTyped = action.payload.correct;
+      }
+      if (action.payload.incorrect) {
+        state.incorrectWordsTyped = action.payload.incorrect;
+      }
+      if (action.payload.extra) {
+        state.extraWordsTyped = action.payload.extra;
       }
     },
   },

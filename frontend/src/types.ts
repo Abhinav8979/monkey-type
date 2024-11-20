@@ -24,3 +24,13 @@ export interface TimerType {
   startTime: number;
   onTimeUp: () => void;
 }
+
+export interface PracticeGameResult {
+  wps: number;
+  raw: number;
+  accuracy: number;
+  time: number;
+  incorrect: number;
+  correct: number;
+  extra: number;
+}

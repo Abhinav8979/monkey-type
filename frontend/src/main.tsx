@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import VsMode from "./pages/VsMode.tsx";
 import Practice from "./pages/Practice.tsx";
 import PracticeProvider from "./redux/PracticeProvider.tsx";
+import ProtectedRoute from "./utils/ProtectedRoute.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "play-1v1",
-        element: <VsMode />,
+        element: (
+          <ProtectedRoute>
+            <VsMode />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "practice",

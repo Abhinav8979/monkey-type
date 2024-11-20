@@ -11,9 +11,12 @@ import { Tooltip } from "react-tooltip";
 import { useDispatch } from "react-redux";
 import { setSelectedOption } from "../redux/features/practiceSlice"; // Update with the actual path to your slice
 import { ToolTipStyle } from "../types";
+import { useAppSelector } from "../redux/hooks";
 
 const Options = () => {
   const dispatch = useDispatch();
+
+  const gameStart = useAppSelector((state) => state.practice.startPracticeGame);
 
   const [tooltipStyles, setTooltipStyles] = useState<ToolTipStyle>({
     backgroundColor: "",
@@ -42,7 +45,13 @@ const Options = () => {
   };
 
   return (
-    <section className="w-full flex gap-32 items-center justify-center font-medium text-textPrimary text-sm mt-20">
+    <section
+      style={{
+        filter: gameStart ? "blur(3px)" : "none",
+        pointerEvents: gameStart ? "none" : "initial",
+      }}
+      className="w-full flex gap-32 items-center justify-center font-medium text-textPrimary text-sm mt-20"
+    >
       <div className="border-2 border-textSecondary py-1 px-1 rounded-3xl flex gap-3">
         {[
           { icon: faAt, tooltip: "Add punctuations", value: "punctuations" },

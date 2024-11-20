@@ -1,10 +1,49 @@
 import { Link } from "react-router-dom";
 import { FaArrowLeft, FaShareAlt } from "react-icons/fa";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setPracticeGameResult } from "../../redux/features/practiceSlice";
+import { useEffect, useState } from "react";
+import { PracticeGameResult } from "../../types";
+import {
+  calculateAccuray,
+  calculateRawWPM,
+  calculateWPM,
+} from "../../utils/helperFunction";
 
 const PracticeResult = () => {
   const dispatch = useAppDispatch();
+  const [gameResult, setGameResult] = useState<PracticeGameResult | null>(null);
+
+  const typedWords = useAppSelector((state) => state.practice.noOfWordsTyped);
+  const totalWords = useAppSelector((state) => state.practice.totalWords);
+  const incorrect = useAppSelector(
+    (state) => state.practice.incorrectWordsTyped
+  );
+  const correct = useAppSelector((state) => state.practice.correctWordsTyped);
+  const extra = useAppSelector((state) => state.practice.extraWordsTyped);
+  const time =
+    useAppSelector((state) => state.practice.selectedOptions.group1) || 15;
+
+  useEffect(() => {
+    if (!!correct && !!incorrect) {
+      const raw = calculateRawWPM(typedWords, time, totalWords);
+      const wps = calculateWPM(time, correct, totalWords);
+      const accuracy = calculateAccuray(correct, typedWords);
+      setGameResult({
+        wps,
+        raw,
+        accuracy,
+        time,
+        incorrect,
+        correct,
+        extra,
+      });
+    }
+  }, []);
+
+  if (!gameResult) {
+    return <h1>loading...</h1>;
+  }
 
   return (
     <>
@@ -19,23 +58,47 @@ const PracticeResult = () => {
           </div>
           <div className="mt-12 capitalize">
             <div className="flex justify-around">
-              <div>Wpm</div>
-              <div>Accuracy</div>
-              <div>Sec</div>
-              <div>Raw</div>
+              <h1>
+                <span className="text-5xl mx-2">{gameResult?.wps}</span>Wpm
+              </h1>
+              <h1>
+                <span className="text-5xl mx-2">
+                  {gameResult?.accuracy + "%"}
+                </span>
+                Accuracy
+              </h1>
+              <h1>
+                <span className="text-5xl mx-2">{gameResult?.time}</span>Sec
+              </h1>
+              <h1>
+                <span className="text-5xl mx-2">{gameResult?.raw}</span>Raw
+              </h1>
             </div>
 
-            <div className="flex justify-around mt-12">
-              <div className="flex flex-col gap-1">
-                <h3>Characters</h3>
-                <div className="flex gap-1">
-                  <h3>50</h3>
+            <div className="flex justify-around items-end mt-12">
+              <div className="flex flex-col  gap-1">
+                <h1 className="text-2xl mb-1">Characters</h1>
+                <div className="flex items-end gap-1">
+                  <h3 className="text-5xl">{gameResult?.correct}</h3>
                   <h3>Correct</h3>
                 </div>
               </div>
-              <div>incorrect</div>
-              <div>extra</div>
-              <div>missed</div>
+              <h3>
+                {" "}
+                <span className="text-5xl mx-2">{gameResult?.incorrect}</span>
+                incorrect
+              </h3>
+              <h3>
+                {" "}
+                <span className="text-5xl mx-2">{gameResult?.extra}</span>extra
+              </h3>
+              <h3>
+                {" "}
+                <span className="text-5xl mx-2">
+                  {totalWords - (gameResult?.correct + gameResult?.incorrect)}
+                </span>
+                missed
+              </h3>
             </div>
           </div>
         </main>

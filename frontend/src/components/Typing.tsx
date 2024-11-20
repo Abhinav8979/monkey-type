@@ -13,6 +13,9 @@ const Typing = () => {
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
   const [noOfWordsTyped, setNoOfWordsTyped] = useState<number>(0);
 
+  //0-> correct , 1-> incorrect 2-> extra
+  const [typeSummary, setTypeSummary] = useState<number[]>([0, 0, 0]);
+
   const selectedOption = useAppSelector(
     (state) => state.practice.selectedOptions
   );
@@ -93,7 +96,6 @@ const Typing = () => {
           });
           currentWordChars[i] = "";
         }
-
         newTypedChars[currentWordIndex] = currentWordChars;
         return newTypedChars;
       });
@@ -117,6 +119,13 @@ const Typing = () => {
         span.classList.add("created");
         element?.appendChild(span);
         updateCursorPosition(true, true);
+
+        setTypeSummary((prev) => {
+          const updatedSummary = [...prev];
+          updatedSummary[2] = updatedSummary[2] + 1;
+          return updatedSummary;
+        });
+
         return;
       }
 
@@ -128,6 +137,13 @@ const Typing = () => {
 
       const expectedChar = words[currentWordIndex][currentLetterIndex];
       const isCorrect = key === expectedChar;
+
+      setTypeSummary((prev) => {
+        const updatedSummary = [...prev];
+        updatedSummary[isCorrect ? 0 : 1] =
+          updatedSummary[isCorrect ? 0 : 1] + 1;
+        return updatedSummary;
+      });
 
       setTypedChars((prevTypedChars) => {
         const newTypedChars = [...prevTypedChars];
@@ -161,6 +177,14 @@ const Typing = () => {
           return;
         }
 
+        setTypeSummary((prev) => {
+          const updatedSummary = [...prev];
+          let letter = typedChars[currentWordIndex][currentLetterIndex];
+          updatedSummary[letter === "correct" ? 0 : 1] =
+            updatedSummary[letter === "correct" ? 0 : 1] - 1;
+          return updatedSummary;
+        });
+
         setTypedChars((prevTypedChars) => {
           const newTypedChars = [...prevTypedChars];
           const currentWordChars = newTypedChars[currentWordIndex] || [];
@@ -182,6 +206,14 @@ const Typing = () => {
         });
         setCurrentLetterIndex((prev) => Math.max(prev - 1, 0));
         if (currentLetterIndex) {
+          setTypeSummary((prev) => {
+            const updatedSummary = [...prev];
+            let letter = typedChars[currentWordIndex][currentLetterIndex];
+            updatedSummary[letter === "correct" ? 0 : 1] =
+              updatedSummary[letter === "correct" ? 0 : 1] - 1;
+            return updatedSummary;
+          });
+
           setNoOfWordsTyped((prev) => {
             const updatedValue = prev - 1;
             dispatch(setWordsSummary({ noOfWordsTyped: updatedValue }));
@@ -216,6 +248,16 @@ const Typing = () => {
   useEffect(() => {
     updateCursorPosition(); // Update cursor whenever letter or word index changes
   }, [currentLetterIndex, currentWordIndex]);
+
+  useEffect(() => {
+    dispatch(
+      setWordsSummary({
+        correct: typeSummary[0],
+        incorrect: typeSummary[1],
+        extra: typeSummary[2],
+      })
+    );
+  }, [typeSummary]);
 
   return (
     <div className="relative h-[220px] overflow-hidden text-4xl leading-[55px] text-left ">
