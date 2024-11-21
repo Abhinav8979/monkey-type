@@ -24,7 +24,7 @@ const ProgressBar = () => {
           style={{
             transform: `translateX(${progressWidth}%)`,
           }}
-          className="transition-transform duration-400 ease-out flex gap-1 items-center"
+          className="transition-transform duration-400 ease-out flex flex-col gap-1 justify-center items-center"
         >
           {localStorage.getItem("ProfileIcon") ? (
             <img

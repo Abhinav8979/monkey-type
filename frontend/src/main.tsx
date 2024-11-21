@@ -9,6 +9,7 @@ import PracticeProvider from "./redux/PracticeProvider.tsx";
 import ProtectedRoute from "./utils/ProtectedRoute.tsx";
 import Login from "./pages/Login.tsx";
 import CreateAccount from "./pages/CreateAccount.tsx";
+import Sphere from "./pages/Sphere.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "practice",
         element: <Practice />,
+      },
+      {
+        path: "/sphere",
+        element: <Sphere />,
       },
       {
         path: "/",
