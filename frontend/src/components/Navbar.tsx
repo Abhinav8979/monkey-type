@@ -9,11 +9,11 @@ import SignOutModal from "./SignOut";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [signOutModal, setSignOutModal] = useState(false); // Fixed typo
+  const [signOutModal, setSignOutModal] = useState(false);
 
   const gameStart = useAppSelector((state) => state.practice.startPracticeGame);
 
-  const isAuthenticated = localStorage.getItem("playerName") ? true : true;
+  const isAuthenticated = localStorage.getItem("playerName") ? true : false;
 
   const links: LinkPropType[] = [
     { name: "Speed Test", path: "/" },

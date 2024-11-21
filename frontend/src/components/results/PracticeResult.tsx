@@ -13,6 +13,7 @@ import {
 const PracticeResult = () => {
   const dispatch = useAppDispatch();
   const [gameResult, setGameResult] = useState<PracticeGameResult | null>(null);
+  const name = localStorage.getItem("playerName");
 
   const typedWords = useAppSelector((state) => state.practice.noOfWordsTyped);
   const totalWords = useAppSelector((state) => state.practice.totalWords);
@@ -27,7 +28,7 @@ const PracticeResult = () => {
   useEffect(() => {
     if (!!correct && !!incorrect) {
       const raw = calculateRawWPM(typedWords, time, totalWords);
-      const wps = calculateWPM(time, correct, totalWords);
+      const wps = calculateWPM(time, correct, typedWords);
       const accuracy = calculateAccuray(correct, typedWords);
       setGameResult({
         wps,
@@ -53,7 +54,7 @@ const PracticeResult = () => {
         >
           <div className="text-textPrimary flex justify-between items-center">
             <h2 className="md:text-6xl text-3xl font-semibold capitalize">
-              name (you)
+              {name ? name : "UnkownUser"}
             </h2>
           </div>
           <div className="mt-12 capitalize">
