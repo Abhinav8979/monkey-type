@@ -17,6 +17,10 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
+        path: "/",
+        element: <Practice />,
+      },
+      {
         path: "play-1v1",
         element: (
           <ProtectedRoute>
@@ -33,8 +37,8 @@ const router = createBrowserRouter([
         element: <Sphere />,
       },
       {
-        path: "/",
-        element: <Practice />,
+        path: "/sphere",
+        element: <Sphere />,
       },
     ],
   },

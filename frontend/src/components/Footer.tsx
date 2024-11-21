@@ -16,10 +16,8 @@ import { useAppSelector } from "../redux/hooks";
 const Footer = () => {
   const items = [
     { name: "Contact", icon: faPhone },
-    { name: "Instagram", icon: faInstagram },
     { name: "Twitter", icon: faTwitter },
     { name: "Discord", icon: faDiscord },
-    { name: "GitHub", icon: faGithub },
     { name: "Security", icon: faShieldAlt },
     { name: "Privacy", icon: faLock },
     { name: "Support", icon: faHeadset },
@@ -33,7 +31,7 @@ const Footer = () => {
         pointerEvents: gameStart ? "none" : "initial",
         filter: gameStart ? "blur(3px)" : "blur(0px)",
       }}
-      className="flex gap-5 md:gap-10 items-center justify-center text-sm text-textPrimary absolute bottom-[4%] left-1/2 -translate-x-1/2"
+      className="flex gap-5 md:gap-9 items-center justify-center text-sm text-textPrimary absolute bottom-[4%] left-1/2 -translate-x-1/2"
     >
       {items.map((item, index) => (
         <div

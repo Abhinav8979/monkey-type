@@ -5,7 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 import { LinkPropType } from "../types";
 import ThemeSelector from "./ThemeSelector";
 import { useAppSelector } from "../redux/hooks";
-import SignOutModal from "./SignOut";
+import SignOutModal from "./SignOutModal";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -45,17 +45,15 @@ const Navbar = () => {
           pointerEvents: gameStart ? "none" : "initial",
           filter: gameStart ? "blur(3px)" : "blur(0px)",
         }}
-        className="flex justify-between items-center p-4 bg-bgColor fixed top-0 left-0 right-0 z-50"
-        aria-disabled={gameStart} // Accessibility enhancement
+        className="flex justify-between items-center p-4 bg-bgColor text-textPrimary fixed top-0 left-0 right-0 z-50"
+        aria-disabled={gameStart}
       >
-        {/* Sign-Out Modal */}
         <SignOutModal
           isOpen={signOutModal}
           onClose={handleCloseModal}
           onSignOut={handleSignOut}
         />
 
-        {/* Logo */}
         <h1
           className={`flex items-center text-xl md:text-2xl font-bold ${
             gameStart ? "cursor-not-allowed" : ""
@@ -66,7 +64,6 @@ const Navbar = () => {
           <span className="ml-2">Fast Fingers</span>
         </h1>
 
-        {/* Desktop Menu */}
         <div
           className={`hidden md:flex font-thin ${
             gameStart ? "pointer-events-none" : ""
@@ -92,7 +89,6 @@ const Navbar = () => {
           </ol>
         </div>
 
-        {/* Right Side (Theme Selector & Buttons) */}
         <div
           className={`hidden md:flex items-center space-x-4 ${
             gameStart ? "pointer-events-none" : ""
@@ -129,7 +125,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <ThemeSelector />
           <button
@@ -145,7 +140,6 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div
             className={`absolute top-16 left-0 right-0 bg-white dark:bg-gray-800 shadow-md md:hidden ${

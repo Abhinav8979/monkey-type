@@ -13,6 +13,7 @@ const ProgressBar = () => {
   const progressWidth =
     totalWords > 0 ? (noOfWordsTyped / totalWords) * 100 : 0;
 
+  console.log(progressWidth);
   if (progressWidth === 100) {
     dispatch(setPracticeGameResult(true));
   }
@@ -24,7 +25,7 @@ const ProgressBar = () => {
           style={{
             transform: `translateX(${progressWidth}%)`,
           }}
-          className="transition-transform duration-400 ease-out flex flex-col gap-1 justify-center items-center"
+          className="transition-transform duration-400 ease-out flex flex-col"
         >
           {localStorage.getItem("ProfileIcon") ? (
             <img

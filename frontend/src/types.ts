@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface LinkPropType {
   name: string;
   path: string;
@@ -33,4 +35,9 @@ export interface PracticeGameResult {
   incorrect: number;
   correct: number;
   extra: number;
+}
+
+export interface Props {
+  heading: string;
+  setModal: Dispatch<SetStateAction<boolean>>;
 }

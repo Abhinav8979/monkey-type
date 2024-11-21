@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import "./vsMode.css";
 import { generateRoomID } from "../utils/helperFunction";
-// import { playerJoinedOneVsOneRoom } from "../utils/socketFunctions";
 import Typing from "../components/Typing";
 import { OneVsOne } from "../utils/socketFunctions";
 import OneVsOneTyping from "../components/OneVsOneTyping";
