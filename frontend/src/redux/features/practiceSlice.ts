@@ -21,6 +21,7 @@ const practiceSlice = createSlice({
   reducers: {
     setSelectedOption: (state, action) => {
       state.selectedOptions = action.payload;
+      console.log(state.selectedOptions);
     },
     setPracticeGameStart: (state, action) => {
       state.startPracticeGame = action.payload;

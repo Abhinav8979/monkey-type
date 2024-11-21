@@ -15,6 +15,7 @@ const Practice = () => {
   const selectedOption = useAppSelector(
     (state) => state.practice.selectedOptions
   );
+  // console.log(selectedOption);
   const gameStart = useAppSelector((state) => state.practice.startPracticeGame);
   const gameResult = useAppSelector(
     (state) => state.practice.showPracticeGameResult

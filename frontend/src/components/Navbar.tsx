@@ -5,7 +5,7 @@ import { Link, NavLink } from "react-router-dom";
 import { LinkPropType } from "../types";
 import ThemeSelector from "./ThemeSelector";
 import { useAppSelector } from "../redux/hooks";
-import SignOutModal from "./SignOut"; // Updated import
+import SignOutModal from "./SignOut";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -28,10 +28,10 @@ const Navbar = () => {
   };
 
   const handleSignOut = () => {
-    // Handle sign-out logic here (e.g., clearing localStorage, redirecting)
     localStorage.removeItem("playerName");
+    localStorage.removeItem("token");
     setSignOutModal(false);
-    window.location.reload(); // Or redirect to login page
+    window.location.reload();
   };
 
   const handleCloseModal = () => {

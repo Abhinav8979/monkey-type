@@ -26,7 +26,7 @@ const Options = () => {
   const [localSelectedOptions, setLocalSelectedOptions] = useState({
     group1: null,
     group2: "timer",
-    timer: 15,
+    time: 15,
   });
 
   useEffect(() => {
@@ -37,7 +37,10 @@ const Options = () => {
     });
   }, []);
 
-  const handleSelect = (group: "group1" | "group2" | "timer", value: any) => {
+  const handleSelect = (
+    group: "group1" | "group2" | "time",
+    value: number | string
+  ) => {
     const updatedOptions = { ...localSelectedOptions, [group]: value };
     setLocalSelectedOptions(updatedOptions);
 
@@ -104,9 +107,9 @@ const Options = () => {
             data-tooltip-id="my-tooltip"
             data-tooltip-content={`${timer} seconds`}
             data-tooltip-place="bottom"
-            onClick={() => handleSelect("timer", timer)}
+            onClick={() => handleSelect("time", timer)}
             className={`cursor-pointer px-3 py-2 rounded-full transition-colors duration-300 ${
-              localSelectedOptions.timer === timer
+              localSelectedOptions.time === timer
                 ? "bg-textPrimary text-bgColor"
                 : "text-textPrimary hover:text-bgColor hover:bg-textPrimary"
             }`}

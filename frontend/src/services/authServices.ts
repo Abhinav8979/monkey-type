@@ -5,6 +5,10 @@ const apiClient = axios.create({
   baseURL: apiBaseUrl || "http://localhost:5173",
   timeout: 10000,
   headers: {
+    Authorization:
+      "Typing " + localStorage.getItem("token")
+        ? localStorage.getItem("token")
+        : "",
     "Content-Type": "application/json",
   },
 });
@@ -13,6 +17,7 @@ export const loginUser = async (email: string, password: string) => {
   try {
     const response = await apiClient.post("/api/login", { email, password });
     if (response.status === 200) {
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } else {
       throw new Error("Invalid credentials");
@@ -38,6 +43,7 @@ export const RegisterUser = async (
       name,
     });
     if (response.status === 200) {
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } else {
       throw new Error("Registration failed");
