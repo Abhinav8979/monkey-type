@@ -3,6 +3,7 @@ import { generateRoomID } from "../../utils/helperFunction";
 import { Props } from "../../types";
 import { useDispatch } from "react-redux";
 import { setGameStart } from "../../redux/features/commonSlice";
+import { setSphereRoomId } from "../../redux/features/SphereSlice";
 
 const SphereModal = (props: Props) => {
   const [roomid, setRoomId] = useState<string | null>(null);
@@ -34,6 +35,7 @@ const SphereModal = (props: Props) => {
   useEffect(() => {
     if (props.heading === "create room") {
       const roomid = generateRoomID();
+      dispatch(setSphereRoomId(roomid));
       setRoomId(roomid);
     }
   }, []);

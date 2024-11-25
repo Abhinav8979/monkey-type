@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   playersResult: [],
+  roomId: "",
 };
 
 //   player result will contain :
@@ -14,9 +15,13 @@ const initialState = {
 const sphereSlice = createSlice({
   name: "sphere",
   initialState,
-  reducers: {},
+  reducers: {
+    setSphereRoomId: (state, action) => {
+      state.roomId = action.payload;
+    },
+  },
 });
 
-export const {} = sphereSlice.actions;
+export const { setSphereRoomId } = sphereSlice.actions;
 
 export default sphereSlice.reducer;

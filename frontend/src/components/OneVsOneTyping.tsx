@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const OneVsOneTyping = ({ words }: { words: string[] }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -6,10 +7,13 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
   const [typedChars, setTypedChars] = useState<string[][]>([]);
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
   const [gameStart, setGameStart] = useState(false);
+  const sphereRoomReady = useAppSelector((state) => state.common.startGame);
   const [countdown, setCountdown] = useState(5);
 
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const gameDivRef = useRef<HTMLDivElement>(null);
+
+  const dispatch = useAppDispatch();
 
   function generateWords() {
     setTypedChars(words.map(() => []));
@@ -43,7 +47,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
   };
 
   const handleKeyupEvent = (event: KeyboardEvent) => {
-    if (!gameStart) {
+    if (!gameStart || !sphereRoomReady) {
       alert("returning");
       return;
     }
@@ -158,15 +162,17 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
   };
 
   useEffect(() => {
-    if (countdown > 0) {
-      setTimeout(() => {
-        setCountdown((prev) => prev - 1);
-      }, 1000);
-    } else {
-      setGameStart(true);
-      gameDivRef.current?.focus();
+    if (sphereRoomReady) {
+      if (countdown > 0) {
+        setTimeout(() => {
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+      } else {
+        setGameStart(true);
+        gameDivRef.current?.focus();
+      }
     }
-  }, [countdown]);
+  }, [countdown, sphereRoomReady]);
 
   useEffect(() => {
     generateWords();
@@ -198,7 +204,11 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
         className="text-textSecondary pl-[.5px] flex flex-wrap"
       >
         {words.map((word, wordIndex) => (
-          <div key={wordIndex} className="mr-3 text-sm md:text-base" id={`word-${wordIndex}`}>
+          <div
+            key={wordIndex}
+            className="mr-3 text-sm md:text-base"
+            id={`word-${wordIndex}`}
+          >
             {word.split("").map((char, charIndex) => (
               <span
                 key={charIndex}
@@ -224,12 +234,10 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
         ref={cursorRef}
         className="w-[1.5px] h-[2rem] bg-bgCursorColor absolute top-[12px] animate-blink"
       ></div>
-      {!gameStart ? (
+      {!gameStart && sphereRoomReady && (
         <div className="text-center md:text-6xl text-4xl font-bold text-textPrimary z-10">
           Game starts in: {countdown}
         </div>
-      ) : (
-        <h1>no game count down</h1>
       )}
     </div>
   );
