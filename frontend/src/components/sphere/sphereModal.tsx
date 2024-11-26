@@ -3,7 +3,10 @@ import { generateRoomID } from "../../utils/helperFunction";
 import { Props } from "../../types";
 import { useDispatch } from "react-redux";
 import { setGameStart } from "../../redux/features/commonSlice";
-import { setSphereRoomId } from "../../redux/features/SphereSlice";
+import {
+  setSphereGameStart,
+  setSphereRoomId,
+} from "../../redux/features/SphereSlice";
 
 const SphereModal = (props: Props) => {
   const [roomid, setRoomId] = useState<string | null>(null);
@@ -20,7 +23,7 @@ const SphereModal = (props: Props) => {
       navigator.clipboard
         .writeText(roomid)
         .then(() => {
-          dispatch(setGameStart(true));
+          dispatch(setSphereGameStart(true));
           props.setModal(false);
         })
         .catch((err) => {

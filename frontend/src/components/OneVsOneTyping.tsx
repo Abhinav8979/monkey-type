@@ -13,8 +13,6 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const gameDivRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useAppDispatch();
-
   function generateWords() {
     setTypedChars(words.map(() => []));
   }
@@ -48,7 +46,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
 
   const handleKeyupEvent = (event: KeyboardEvent) => {
     if (!gameStart || !sphereRoomReady) {
-      alert("returning");
+      // alert("returning");
       return;
     }
     const key = event.key;
@@ -206,7 +204,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
         {words.map((word, wordIndex) => (
           <div
             key={wordIndex}
-            className="mr-3 text-sm md:text-base"
+            className="mr-3"
             id={`word-${wordIndex}`}
           >
             {word.split("").map((char, charIndex) => (

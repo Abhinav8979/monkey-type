@@ -5,7 +5,9 @@ import SphereModal from "../components/sphere/sphereModal";
 import SphereLobby from "../components/sphere/sphereLobby";
 
 const Sphere = () => {
-  const sphereGameStart = useAppSelector((state) => state.common.startGame);
+  const sphereGameStart = useAppSelector(
+    (state) => state.sphere.sphereGameStart
+  );
   const [modal, setModal] = useState(false);
   const [heading, setHeading] = useState("");
 

@@ -1,12 +1,14 @@
 import { setPracticeGameResult } from "../redux/features/practiceSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { FaUserCircle } from "react-icons/fa"; // Import a default user profile icon
+import { FaUserCircle } from "react-icons/fa";
 
 const ProgressBar = () => {
   const noOfWordsTyped = useAppSelector(
     (state) => state.practice.noOfWordsTyped
   );
+
   const totalWords = useAppSelector((state) => state.practice.totalWords);
+  const sphereRoomId = useAppSelector((state) => state.sphere.roomId);
 
   const dispatch = useAppDispatch();
 
@@ -20,7 +22,7 @@ const ProgressBar = () => {
 
   return (
     <section className="w-full flex justify-center mb-10 overflow-hidden">
-      <div className="w-[50%] border-b pb-4">
+      <div className={`${sphereRoomId ? "w-[90%]" : "w-[50%]"} border-b pb-4`}>
         <div
           style={{
             transform: `translateX(${progressWidth}%)`,

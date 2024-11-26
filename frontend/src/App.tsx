@@ -5,7 +5,9 @@ import Navbar from "./components/Navbar";
 import { useAppSelector } from "./redux/hooks";
 
 function App() {
-  const gameStart = useAppSelector((state) => state.common.startGame);
+  const sphereGameStart = useAppSelector(
+    (state) => state.sphere.sphereGameStart
+  );
 
   return (
     <main className="md:px-[6rem] px-[3rem] py-5 md:py-9 bg-bgColor h-screen text-textPrimary relative">
@@ -13,7 +15,7 @@ function App() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:px-[6rem] px-[3rem] py-5 md:py-9">
         <Outlet />
       </div>
-      {gameStart && <Footer />}
+      {!sphereGameStart && <Footer />}
     </main>
   );
 }
