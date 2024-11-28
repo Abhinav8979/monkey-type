@@ -19,6 +19,7 @@ const sphereLobby = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [word, setWord] = useState<string[]>([]);
   const [inviteRoomid, setInviteRoomid] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>("");
 
   const roomid = useAppSelector((state) => state.sphere.roomId);
   const gameStart = useAppSelector((state) => state.common.startGame);
@@ -29,6 +30,17 @@ const sphereLobby = () => {
 
   const handleSphereGameStart = () => {
     dispatch(setGameStart(true));
+  };
+
+  const handleMessage = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      socket?.emit("message:sphere-room", {
+        roomid,
+        message: message,
+        name: localStorage.getItem("playerName") || "rohan",
+      });
+      setMessage("");
+    }
   };
 
   useEffect(() => {
@@ -42,9 +54,11 @@ const sphereLobby = () => {
       });
 
       socket.on("player:joined:sphere-room", ({ data, word }) => {
-        toast(localStorage.getItem("playerName") + " joined the room");
+        toast(localStorage.getItem("playerName") + " joined the room", {
+          style: { zIndex: "100" },
+        });
         dispatch(setPlayerData(data));
-        setWord(word.split(""));
+        setWord(word);
       });
 
       socket.on("wrong:sphere-room-id", (inviteRoomid) => {
@@ -73,7 +87,7 @@ const sphereLobby = () => {
 
   useEffect(() => {
     setLoading(true);
-    const newSocket = io(process.env.SOCKET_API_BASE_URL);
+    const newSocket = io("http://localhost:5353");
 
     const searchParams = new URLSearchParams(window.location.search);
 
@@ -98,23 +112,21 @@ const sphereLobby = () => {
           <h1 className="font-bold text-2xl py-3 px-6 border-x roundedx-t-lg">
             Sphere chat
           </h1>
-          <div className="border-t border-x flex flex-col gap-5 border-textPrimary min-h-[350px] overflow-y-auto">
+          <div className="border-t border-x flex flex-col border-textPrimary h-[350px] overflow-y-auto px-3">
             {messages &&
               messages.map((msg, index) => (
-                <p
-                  key={index}
-                  className={
-                    index % 2 === 0
-                      ? "bg-black bg-opacity-60  md:p-1 p-[3px]"
-                      : "bg-white p-[3px] md:p-1"
-                  }
-                >
+                <p key={index} className=" md:p-1 p-[3px] text-textPrimary">
                   {msg.senderName && (
-                    <span className="font-medium text-black">
+                    <span className="font-medium text-textSecondary">
                       {msg.senderName} :
                     </span>
                   )}
-                  <span>{msg.text}</span>
+                  <span
+                    className="ml-3
+                  "
+                  >
+                    {msg.text}
+                  </span>
                 </p>
               ))}
           </div>
@@ -123,12 +135,15 @@ const sphereLobby = () => {
             name="chat"
             placeholder="Type a message"
             className="w-full py-3 px-4 bg-bgColor text-textCorrectColor border rounded-b-lg focus:outline-none"
+            onKeyDown={(e) => handleMessage(e)}
+            onChange={(e) => setMessage(e.target.value)}
+            value={message}
           />
           <div className="flex gap-3 font-semibold text-2xl mt-6">
             <button
               type="button"
               onClick={handleSphereGameStart}
-              disabled={!gameStart}
+              disabled={gameStart}
               style={{
                 cursor: gameStart ? "not-allowed" : "pointer",
               }}
