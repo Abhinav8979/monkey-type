@@ -61,9 +61,22 @@ exports.removeSphereRoomPlayer = (roomid, name) => {
   sphereRoomMap.delete();
 };
 
-exports.deletePlayerSphereData = (roomid) => {
-  sphereRoomMap.delete(roomid);
-  sphereRoomWord.delete(roomid);
+const removeFromMap = (map, roomid, socketId) => {
+  if (map.has(roomid)) {
+    const itemList = map.get(roomid);
+    const updatedList = itemList.filter((item) => item.socketId !== socketId);
+
+    if (updatedList.length > 0) {
+      map.set(roomid, updatedList);
+    } else {
+      map.delete(roomid);
+    }
+  }
+};
+exports.deletePlayerSphereData = (roomid, socketId) => {
+  removeFromMap(sphereRoomMap, roomid, socketId);
+  removeFromMap(sphereRoomWord, roomid, socketId);
+  removeFromMap(spherePlayerData, roomid, socketId);
 };
 
 exports.addPlayerToRoom = (roomid, name, noOfWordsTyped = null) => {
@@ -75,6 +88,7 @@ exports.addPlayerToRoom = (roomid, name, noOfWordsTyped = null) => {
   } else {
     spherePlayerData.get(roomid).push({ name, noOfWordsTyped: 0 });
   }
+  return spherePlayerData;
 };
 
 exports.setSphereMessageData = (roomid, message, senderName) => {

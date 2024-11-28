@@ -15,6 +15,7 @@ const {
   getSphereRoomWord,
   deletePlayerSphereData,
   setSphereMessageData,
+  addPlayerToRoom,
 } = require("./utls/playerData.js");
 
 const app = express();
@@ -64,11 +65,10 @@ io.on("connection", (socket) => {
   });
 
   // SPHERE ROOM
-  socket.on("player:disconnected:sphere-room", (roomid) => {
+  socket.on("player:disconnected:sphere-room", ({ roomid, socketId }) => {
     if (roomid) {
       socket.leave(roomid);
-      spherePlayerData.delete(roomid);
-      deletePlayerSphereData(roomid);
+      deletePlayerSphereData(roomid, socketId);
     }
   });
 
@@ -79,10 +79,9 @@ io.on("connection", (socket) => {
     }
 
     socket.join(roomid);
-    spherePlayerData.set(roomid, { name: name });
-    addPlayerToRoom(roomid, name);
+    const spherePlayerData = addPlayerToRoom(roomid, name);
     const exist = checkSphereRoomExist(roomid);
-    
+
     if (exist) {
       const word = getSphereRoomWord(roomid);
       io.to(roomid).emit("player:joined:sphere-room", {
