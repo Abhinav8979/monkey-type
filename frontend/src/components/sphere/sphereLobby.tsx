@@ -4,29 +4,120 @@ import ProgressBar from "../../utils/ProgressBar";
 import OneVsOneTyping from "../OneVsOneTyping";
 import Options from "../Options";
 import { setGameStart } from "../../redux/features/commonSlice";
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
+import toast from "react-hot-toast";
+import {
+  setPlayerData,
+  setPlayerMessage,
+} from "../../redux/features/SphereSlice";
+import { redirect } from "react-router-dom";
+import { message } from "../../types";
 
 const sphereLobby = () => {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [word, setWord] = useState<string[]>([]);
+  const [inviteRoomid, setInviteRoomid] = useState<string | null>(null);
+
   const roomid = useAppSelector((state) => state.sphere.roomId);
   const gameStart = useAppSelector((state) => state.common.startGame);
   const dispatch = useAppDispatch();
+  const messages: message[] = useAppSelector(
+    (state) => state.sphere.playerMessages
+  );
 
   const handleSphereGameStart = () => {
     dispatch(setGameStart(true));
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("connect", () => {
+        socket.emit("player:joined:sphere-room", {
+          roomid,
+          name: localStorage.getItem("playerName") || "rohan",
+          inviteRoomid: inviteRoomid,
+        });
+      });
+
+      socket.on("player:joined:sphere-room", ({ data, word }) => {
+        toast(localStorage.getItem("playerName") + " joined the room");
+        dispatch(setPlayerData(data));
+        setWord(word.split(""));
+      });
+
+      socket.on("wrong:sphere-room-id", (inviteRoomid) => {
+        toast.error("Invalid room ID!");
+        setInviteRoomid(null);
+        redirect("/sphere");
+      });
+
+      socket.on("message:sphere-room:broadcast", (newMessage) => {
+        dispatch((dispatch, getState) => {
+          const currentMessages = getState().sphere.playerMessages;
+          dispatch(setPlayerMessage([...currentMessages, newMessage]));
+        });
+      });
+
+      return () => {
+        socket.emit("player:disconnected:sphere-room", {
+          roomid,
+          name: localStorage.getItem("playerName") || "rohan",
+        });
+        socket.disconnect();
+        socket.off("connect");
+      };
+    }
+  }, [socket, inviteRoomid]);
+
+  useEffect(() => {
+    setLoading(true);
+    const newSocket = io(process.env.SOCKET_API_BASE_URL);
+
+    const searchParams = new URLSearchParams(window.location.search);
+
+    const firstKey = Array.from(searchParams.keys())[0] as string;
+
+    const value = searchParams.get(firstKey);
+
+    setInviteRoomid(value || null);
+
+    setSocket(newSocket);
+  }, []);
 
   return (
     <section className="flex flex-col gap-10 mt-16">
       <div className="flex justify-between gap-16">
         <div className="flex-1">
           <ProgressBar />
-          <OneVsOneTyping words={["sdasd", "vs"]} />
+          {word && <OneVsOneTyping words={word} />}
           {!gameStart && <Options />}
         </div>
         <div className="text-textPrimary w-[320px] border-t rounded-t-lg">
           <h1 className="font-bold text-2xl py-3 px-6 border-x roundedx-t-lg">
             Sphere chat
           </h1>
-          <div className="border-t border-x  border-textPrimary min-h-[350px] overflow-y-auto"></div>
+          <div className="border-t border-x flex flex-col gap-5 border-textPrimary min-h-[350px] overflow-y-auto">
+            {messages &&
+              messages.map((msg, index) => (
+                <p
+                  key={index}
+                  className={
+                    index % 2 === 0
+                      ? "bg-black bg-opacity-60  md:p-1 p-[3px]"
+                      : "bg-white p-[3px] md:p-1"
+                  }
+                >
+                  {msg.senderName && (
+                    <span className="font-medium text-black">
+                      {msg.senderName} :
+                    </span>
+                  )}
+                  <span>{msg.text}</span>
+                </p>
+              ))}
+          </div>
           <input
             type="text"
             name="chat"

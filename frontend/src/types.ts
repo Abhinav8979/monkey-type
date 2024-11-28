@@ -41,3 +41,8 @@ export interface Props {
   heading: string;
   setModal: Dispatch<SetStateAction<boolean>>;
 }
+
+export interface message {
+  text: string;
+  senderName: string;
+}

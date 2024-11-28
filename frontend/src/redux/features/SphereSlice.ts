@@ -1,9 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { message } from "../../types";
 
 const initialState = {
   playersResult: [],
   roomId: "",
   sphereGameStart: false,
+  playerData: [],
+  playerMessages: [],
 };
 
 //   player result will contain :
@@ -23,9 +26,20 @@ const sphereSlice = createSlice({
     setSphereGameStart: (state, action) => {
       state.sphereGameStart = action.payload;
     },
+    setPlayerData: (state, action) => {
+      state.playerData = action.payload;
+    },
+    setPlayerMessage: (state, action) => {
+      state.playerMessages = action.payload;
+    },
   },
 });
 
-export const { setSphereRoomId, setSphereGameStart } = sphereSlice.actions;
+export const {
+  setSphereRoomId,
+  setSphereGameStart,
+  setPlayerData,
+  setPlayerMessage,
+} = sphereSlice.actions;
 
 export default sphereSlice.reducer;

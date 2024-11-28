@@ -7,6 +7,7 @@ import {
   setSphereGameStart,
   setSphereRoomId,
 } from "../../redux/features/SphereSlice";
+import { redirect } from "react-router-dom";
 
 const SphereModal = (props: Props) => {
   const [roomid, setRoomId] = useState<string | null>(null);
@@ -14,7 +15,9 @@ const SphereModal = (props: Props) => {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      alert(`Room ID: ${roomid}`);
+      redirect(`/sphere/?${roomid}`);
+      dispatch(setSphereGameStart(true));
+      props.setModal(false);
     }
   };
 

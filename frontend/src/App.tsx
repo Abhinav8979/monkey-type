@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { useAppSelector } from "./redux/hooks";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const sphereGameStart = useAppSelector(
@@ -13,6 +14,7 @@ function App() {
     <main className="md:px-[6rem] px-[3rem] py-5 md:py-9 bg-bgColor h-screen text-textPrimary relative">
       <Navbar />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:px-[6rem] px-[3rem] py-5 md:py-9">
+        <Toaster />
         <Outlet />
       </div>
       {!sphereGameStart && <Footer />}

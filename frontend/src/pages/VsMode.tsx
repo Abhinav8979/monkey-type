@@ -26,7 +26,7 @@ const VsMode = () => {
       setOpponentName("?");
     } else {
       setLoading(true);
-      const newSocket = io("http://localhost:5353");
+      const newSocket = io(process.env.SOCKET_API_BASE_URL);
       setSocket(newSocket);
     }
   };

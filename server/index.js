@@ -10,6 +10,11 @@ const {
   removeOneVsOneRoom,
   getRoomIdBySocketId,
   generateWords,
+  checkSphereRoomExist,
+  setSphereRoomWord,
+  getSphereRoomWord,
+  deletePlayerSphereData,
+  setSphereMessageData,
 } = require("./utls/playerData.js");
 
 const app = express();
@@ -30,6 +35,7 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+  // ONE VS ONE ROOM
   socket.on("player:finding:one-vs-one-room", ({ roomid, name }) => {
     const roomAvailable = availableOneVsOneRoom();
     if (roomAvailable === -1) {
@@ -56,6 +62,52 @@ io.on("connection", (socket) => {
       removeOneVsOneRoom(roomid);
     }
   });
+
+  // SPHERE ROOM
+  socket.on("player:disconnected:sphere-room", (roomid) => {
+    if (roomid) {
+      socket.leave(roomid);
+      spherePlayerData.delete(roomid);
+      deletePlayerSphereData(roomid);
+    }
+  });
+
+  socket.on("player:joined:sphere-room", ({ roomid, name, inviteRoomid }) => {
+    if (inviteRoomid !== null && !checkSphereRoomExist(inviteRoomid)) {
+      socket.emit("wrong:sphere-room-id", inviteRoomid);
+      return;
+    }
+
+    socket.join(roomid);
+    spherePlayerData.set(roomid, { name: name });
+    addPlayerToRoom(roomid, name);
+    const exist = checkSphereRoomExist(roomid);
+    
+    if (exist) {
+      const word = getSphereRoomWord(roomid);
+      io.to(roomid).emit("player:joined:sphere-room", {
+        data: spherePlayerData,
+        word: word,
+      });
+    } else {
+      const words = generateWords();
+      setSphereRoomWord(roomid, words);
+      io.to(roomid).emit("player:joined:sphere-room", {
+        data: spherePlayerData,
+        word: words,
+      });
+    }
+  });
+
+  socket.on("message:sphere-room", ({ roomid, message, name }) => {
+    io.to(roomid).emit("message:sphere-room", {
+      message: message,
+      name: name,
+    });
+    const newMessage = setSphereMessageData(roomid, message, name);
+    io.to(roomid).emit("message:sphere-room:broadcast", newMessage);
+  });
+
   socket.on("disconnect", () => {
     const id = getRoomIdBySocketId(socket.id);
     if (id) {

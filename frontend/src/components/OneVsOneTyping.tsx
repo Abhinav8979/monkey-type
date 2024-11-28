@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../redux/hooks";
 
 const OneVsOneTyping = ({ words }: { words: string[] }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -202,11 +202,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
         className="text-textSecondary pl-[.5px] flex flex-wrap"
       >
         {words.map((word, wordIndex) => (
-          <div
-            key={wordIndex}
-            className="mr-3"
-            id={`word-${wordIndex}`}
-          >
+          <div key={wordIndex} className="mr-3" id={`word-${wordIndex}`}>
             {word.split("").map((char, charIndex) => (
               <span
                 key={charIndex}
