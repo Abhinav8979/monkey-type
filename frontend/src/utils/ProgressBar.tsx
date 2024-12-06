@@ -20,7 +20,7 @@ const ProgressBar = () => {
   }
 
   return (
-    <section className="w-full flex justify-center mb-10 overflow-hidden">
+    <section className="w-full flex justify-center mb-10 overflow-hidden -mt-[100px]">
       <div className={`${sphereRoomId ? "w-[90%]" : "w-[50%]"} border-b pb-4`}>
         <div
           style={{

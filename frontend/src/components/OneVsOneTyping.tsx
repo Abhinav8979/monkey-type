@@ -54,6 +54,19 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
     }
     const key = event.key;
     // Check if the user typed a space
+
+    const currentWord = document.querySelector(`#word-${currentWordIndex}`);
+    if (
+      currentWord?.getBoundingClientRect() &&
+      currentWord?.getBoundingClientRect().top > 500
+    ) {
+      const wordsElement = document.getElementById("words");
+      if (wordsElement) {
+        const margin = parseInt(wordsElement.style.marginTop || "0px");
+        wordsElement.style.marginTop = `${margin - 60}px`;
+      }
+    }
+
     if (key === " ") {
       if (spaceRequired) {
         setCurrentLetterIndex(0);
@@ -210,6 +223,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
           filter: oneVsOnegameStart ? "blur(0px)" : "blur(4px)",
         }}
         className="text-textSecondary pl-[.5px] flex flex-wrap"
+        id="words"
       >
         {words.map((word, wordIndex) => (
           <div key={wordIndex} className="mr-3" id={`word-${wordIndex}`}>

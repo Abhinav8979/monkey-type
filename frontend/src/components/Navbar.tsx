@@ -20,7 +20,7 @@ const Navbar = () => {
     { name: "Play 1v1", path: "/play-1v1" },
     { name: "Practice", path: "/practice" },
     { name: "Sphere", path: "/sphere" },
-    { name: "Rating", path: "/rating" },
+    // { name: "Rating", path: "/rating" },
   ];
 
   const toggleMobileMenu = () => {

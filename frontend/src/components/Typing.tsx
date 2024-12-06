@@ -32,9 +32,7 @@ const Typing = () => {
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
   const generateWords = () => {
-    console.log(value);
     const text: string = generatePara(value);
-    console.log(text);
     dispatch(setWordsSummary({ totalWords: text.replace(/\s/g, "").length }));
     const wordArray = text.split(" ");
     setWords(wordArray);
@@ -75,6 +73,18 @@ const Typing = () => {
 
     if (!gameStart) {
       dispatch(setPracticeGameStart(true));
+    }
+
+    const currentWord = document.querySelector(`#word-${currentWordIndex}`);
+    if (
+      currentWord?.getBoundingClientRect() &&
+      currentWord?.getBoundingClientRect().top > 500
+    ) {
+      const wordsElement = document.getElementById("words");
+      if (wordsElement) {
+        const margin = parseInt(wordsElement.style.marginTop || "0px");
+        wordsElement.style.marginTop = `${margin - 60}px`;
+      }
     }
 
     // Check if the user typed a space
@@ -264,6 +274,7 @@ const Typing = () => {
       <div
         className="text-textSecondary pl-[.5px] flex flex-wrap focus:outline-0"
         tabIndex={0}
+        id="words"
       >
         {words.length > 2 &&
           words.map((word, wordIndex) => (

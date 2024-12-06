@@ -45,7 +45,11 @@ const Practice = () => {
         <PracticeResult />
       ) : (
         <section>
-          {gameStart && !isPracticeMode && <ProgressBar />}
+          {gameStart && !isPracticeMode ? (
+            <ProgressBar />
+          ) : (
+            <div className="w-full h-[46px]"></div>
+          )}
           <Typing />
           {gameStart && !isPracticeMode ? (
             <div className="text-textIncorrectColor text-sm opacity-80  md:text-3xl mt-12 text-center">
