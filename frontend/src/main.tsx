@@ -10,6 +10,7 @@ import ProtectedRoute from "./utils/ProtectedRoute.tsx";
 import Login from "./pages/Login.tsx";
 import CreateAccount from "./pages/CreateAccount.tsx";
 import Sphere from "./pages/Sphere.tsx";
+import HomePage from "./pages/HomePage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "speed-test",
         element: <Practice />,
       },
       {

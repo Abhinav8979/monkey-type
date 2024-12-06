@@ -16,7 +16,7 @@ const Navbar = () => {
   const isAuthenticated = localStorage.getItem("playerName") ? true : false;
 
   const links: LinkPropType[] = [
-    { name: "Speed Test", path: "/" },
+    { name: "Speed Test", path: "/speed-test" },
     { name: "Play 1v1", path: "/play-1v1" },
     { name: "Practice", path: "/practice" },
     { name: "Sphere", path: "/sphere" },
@@ -95,7 +95,7 @@ const Navbar = () => {
           }`}
         >
           <ThemeSelector />
-          {isAuthenticated ? (
+          {/* {isAuthenticated ? (
             <button
               className="py-2 px-5 rounded-3xl bg-pink-500 text-white hover:bg-pink-600 transition"
               tabIndex={gameStart ? -1 : 0}
@@ -122,7 +122,8 @@ const Navbar = () => {
                 Login
               </button>
             </Link>
-          )}
+          )} */}
+          {<p>userName: {sessionStorage.getItem("userName")}</p>}
         </div>
 
         <div className="md:hidden flex items-center">

@@ -33,7 +33,6 @@ const Practice = () => {
   };
 
   useEffect(() => {
-    console.log(pathname);
     if (pathname === "/practice") {
       console.log("Reched");
       setIsPracticeMode(true);

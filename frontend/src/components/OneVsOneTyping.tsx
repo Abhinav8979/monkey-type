@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setGameStart } from "../redux/features/commonSlice";
 
 const OneVsOneTyping = ({ words }: { words: string[] }) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [typedChars, setTypedChars] = useState<string[][]>([]);
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
-  const [gameStart, setGameStart] = useState(false);
+  const [oneVsOnegameStart, setOneVsOneGameStart] = useState(false);
   const sphereRoomReady = useAppSelector((state) => state.common.startGame);
   const [countdown, setCountdown] = useState(5);
 
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const gameDivRef = useRef<HTMLDivElement>(null);
+
+  const dispatch = useAppDispatch();
 
   function generateWords() {
     setTypedChars(words.map(() => []));
@@ -45,7 +48,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
   };
 
   const handleKeyupEvent = (event: KeyboardEvent) => {
-    if (!gameStart || !sphereRoomReady) {
+    if (!oneVsOnegameStart || !sphereRoomReady) {
       // alert("returning");
       return;
     }
@@ -166,9 +169,11 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
           setCountdown((prev) => prev - 1);
         }, 1000);
       } else {
-        setGameStart(true);
+        setOneVsOneGameStart(true);
         gameDivRef.current?.focus();
       }
+    } else {
+      dispatch(setGameStart(true));
     }
   }, [countdown, sphereRoomReady]);
 
@@ -183,7 +188,7 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyupEvent);
     };
-  }, [currentLetterIndex, currentWordIndex, spaceRequired, gameStart]);
+  }, [currentLetterIndex, currentWordIndex, spaceRequired, oneVsOnegameStart]);
 
   useEffect(() => {
     updateCursorPosition();
@@ -195,9 +200,14 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
       tabIndex={0}
       ref={gameDivRef}
     >
+      {!oneVsOnegameStart && sphereRoomReady && (
+        <div className="text-center md:text-6xl text-4xl font-bold text-textPrimary z-40">
+          Game starts in: {countdown}
+        </div>
+      )}
       <div
         style={{
-          filter: gameStart ? "blur(0px)" : "blur(4px)",
+          filter: oneVsOnegameStart ? "blur(0px)" : "blur(4px)",
         }}
         className="text-textSecondary pl-[.5px] flex flex-wrap"
       >
@@ -223,16 +233,11 @@ const OneVsOneTyping = ({ words }: { words: string[] }) => {
       </div>
       <div
         style={{
-          display: gameStart ? "initial" : "none",
+          display: oneVsOnegameStart ? "initial" : "none",
         }}
         ref={cursorRef}
         className="w-[1.5px] h-[2rem] bg-bgCursorColor absolute top-[12px] animate-blink"
       ></div>
-      {!gameStart && sphereRoomReady && (
-        <div className="text-center md:text-6xl text-4xl font-bold text-textPrimary z-10">
-          Game starts in: {countdown}
-        </div>
-      )}
     </div>
   );
 };

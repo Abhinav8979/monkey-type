@@ -4,14 +4,17 @@ import {
   setPracticeGameStart,
   setWordsSummary,
 } from "../redux/features/practiceSlice";
+import { generatePara } from "../utils/helperFunction";
 
 const Typing = () => {
   const [words, setWords] = useState<string[]>([]);
+  // const words = useAppSelector((state) => state.common.words);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [typedChars, setTypedChars] = useState<string[][]>([]);
   const [spaceRequired, setSpaceRequired] = useState<boolean>(false);
   const [noOfWordsTyped, setNoOfWordsTyped] = useState<number>(0);
+  const value = useAppSelector((state) => state.common.value);
 
   //0-> correct , 1-> incorrect 2-> extra
   const [typeSummary, setTypeSummary] = useState<number[]>([0, 0, 0]);
@@ -28,12 +31,14 @@ const Typing = () => {
 
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
-  const generateWords = (group1: string, group2: string) => {
-    const text =
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis optio ipsa sit cum sint!";
+  const generateWords = () => {
+    console.log(value);
+    const text: string = generatePara(value);
+    console.log(text);
     dispatch(setWordsSummary({ totalWords: text.replace(/\s/g, "").length }));
     const wordArray = text.split(" ");
     setWords(wordArray);
+    // dispatch(setGameWords(wordArray));
     setTypedChars(wordArray.map(() => []));
   };
 
@@ -228,13 +233,8 @@ const Typing = () => {
   };
 
   useEffect(() => {
-    const group1 = selectedOption.group1;
-    if (group1) {
-      generateWords(group1, selectedOption.group2);
-    } else {
-      generateWords("", selectedOption.group2);
-    }
-  }, [selectedOption.group1, selectedOption.group2]);
+    generateWords();
+  }, [value]);
 
   useEffect(() => {
     if (words.length > 0) {
@@ -246,7 +246,7 @@ const Typing = () => {
   }, [words, currentLetterIndex, currentWordIndex, spaceRequired]);
 
   useEffect(() => {
-    updateCursorPosition(); // Update cursor whenever letter or word index changes
+    updateCursorPosition();
   }, [currentLetterIndex, currentWordIndex]);
 
   useEffect(() => {
@@ -265,25 +265,26 @@ const Typing = () => {
         className="text-textSecondary pl-[.5px] flex flex-wrap focus:outline-0"
         tabIndex={0}
       >
-        {words.map((word, wordIndex) => (
-          <div key={wordIndex} className="mr-3" id={`word-${wordIndex}`}>
-            {word.split("").map((char, charIndex) => (
-              <span
-                key={charIndex}
-                id={`word-${wordIndex}-char-${charIndex}`}
-                className={
-                  typedChars[wordIndex]?.[charIndex] === "correct"
-                    ? "correct"
-                    : typedChars[wordIndex]?.[charIndex] === "incorrect"
-                    ? "incorrect"
-                    : ""
-                }
-              >
-                {char}
-              </span>
-            ))}
-          </div>
-        ))}
+        {words.length > 2 &&
+          words.map((word, wordIndex) => (
+            <div key={wordIndex} className="mr-3" id={`word-${wordIndex}`}>
+              {word.split("").map((char, charIndex) => (
+                <span
+                  key={charIndex}
+                  id={`word-${wordIndex}-char-${charIndex}`}
+                  className={
+                    typedChars[wordIndex]?.[charIndex] === "correct"
+                      ? "correct"
+                      : typedChars[wordIndex]?.[charIndex] === "incorrect"
+                      ? "incorrect"
+                      : ""
+                  }
+                >
+                  {char}
+                </span>
+              ))}
+            </div>
+          ))}
       </div>
       <div
         ref={cursorRef}

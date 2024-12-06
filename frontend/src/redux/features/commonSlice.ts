@@ -8,6 +8,8 @@ const initialState = {
   },
   startGame: false,
   showGameResult: false,
+  words: [],
+  value: "words",
 };
 
 const commonSlice = createSlice({
@@ -23,10 +25,13 @@ const commonSlice = createSlice({
     setGameResult: (state, action) => {
       state.showGameResult = action.payload;
     },
+    setGameValue: (state, action) => {
+      state.value = action.payload;
+    },
   },
 });
 
-export const { setSelectedOption, setGameResult, setGameStart } =
+export const { setSelectedOption, setGameResult, setGameStart, setGameValue } =
   commonSlice.actions;
 
 export default commonSlice.reducer;

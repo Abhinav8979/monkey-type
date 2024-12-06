@@ -26,7 +26,7 @@ const VsMode = () => {
       setOpponentName("?");
     } else {
       setLoading(true);
-      const newSocket = io(process.env.SOCKET_API_BASE_URL);
+      const newSocket = io(import.meta.env.VITE_SOCKET_API_BASE_URL);
       setSocket(newSocket);
     }
   };
@@ -44,7 +44,7 @@ const VsMode = () => {
         setRoomid(roomid);
         socket.emit("player:finding:one-vs-one-room", {
           roomid,
-          name: localStorage.getItem("playerName") || "rohan",
+          name: sessionStorage.getItem("userName") || "user1",
         });
       });
       socket.on(
@@ -58,6 +58,8 @@ const VsMode = () => {
         socket.emit("player:disconnected", roomid);
         socket.disconnect();
         socket.off("connect");
+        socket.off("player:joined:one-vs-one-room");
+        socket.off("game:start:one-vs-one-room");
       };
     }
   }, [socket]);
@@ -78,7 +80,7 @@ const VsMode = () => {
         <section className="flex items-center justify-center flex-col md:gap-16 gap-16">
           <div className="text-bgColor flex justify-between items-center w-full gap-5 md:gap-16 font-semibold">
             <div className="bg-textSecondary rounded-xl h-40 md:h-52 flex-1 flex items-center justify-center text-2xl md:text-5xl">
-              <h1>name1 (You)</h1>
+              <h1>{sessionStorage.getItem("userName")} (You)</h1>
             </div>
 
             <div className="flex justify-center items-center">
@@ -103,7 +105,6 @@ const VsMode = () => {
                 className={`bg-bgButton w-[220px] rounded-xl p-4 text-bgColor font-bold cursor-pointer ${
                   loading ? "opacity-75" : "opacity-100"
                 }`}
-                // disabled={loading && playerFound}
               >
                 {loading ? <>Cancel Search</> : <>Find Player</>}
               </button>

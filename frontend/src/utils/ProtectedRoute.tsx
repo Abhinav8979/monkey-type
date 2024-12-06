@@ -2,11 +2,11 @@ import { ReactNode, useEffect, useState } from "react";
 
 const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    !!localStorage.getItem("playerName")
+    !!sessionStorage.getItem("userName")
   );
 
   useEffect(() => {
-    if (localStorage.getItem("playerName")) {
+    if (sessionStorage.getItem("userName")) {
       setIsAuthenticated(true);
     } else {
       setIsAuthenticated(false);

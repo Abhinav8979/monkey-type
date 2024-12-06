@@ -15,7 +15,6 @@ const ProgressBar = () => {
   const progressWidth =
     totalWords > 0 ? (noOfWordsTyped / totalWords) * 100 : 0;
 
-  console.log(progressWidth);
   if (progressWidth === 100) {
     dispatch(setPracticeGameResult(true));
   }
@@ -41,8 +40,8 @@ const ProgressBar = () => {
           )}
           <h1 className="text-sm">
             {" "}
-            {localStorage.getItem("playerName")
-              ? localStorage.getItem("playerName")
+            {sessionStorage.getItem("userName")
+              ? sessionStorage.getItem("userName")
               : "unknown user"}
           </h1>
         </div>
